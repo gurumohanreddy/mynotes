@@ -36,46 +36,24 @@ myApp.config(function($stateProvider,$urlRouterProvider){
 
 });
 
-var notes = [];
 
-
-    getnote = function(noteId){
-        for (var i = 0; i < notes.length; i++) {
-          if (notes[i].id === noteId) {
-              return notes[i]
-          }
-        }
-        return undefined;
-    }
-    updatenote = function(note){
-        for (var i = 0; i < notes.length; i++) {
-          if (notes[i].id === note.id) {
-              notes[i] = note;
-              return;
-          }
-        }
-    }
-    createnote = function(note){
-      notes.push(note);
-    }
-
-myApp.controller('ListCtrl',['$scope',function($scope){
+myApp.controller('ListCtrl',['$scope','noteStore',function($scope,noteStore){
         var vm = this;
-        vm.notes = notes;
+        vm.notes = noteStore.list();
 }]);
 
-myApp.controller('EditCtrl',['$scope','$state',function($scope,$state){
+myApp.controller('EditCtrl',['$scope','noteStore','$state',function($scope,noteStore,$state){
 
         var vm = this;
-        vm.note = angular.copy(getnote($state.params.noteId));
+        vm.note = angular.copy(noteStore.get($state.params.noteId));
         vm.save = function(){
-          updatenote(vm.note);
+          noteStore.update(vm.note);
           $state.go('list');
         }
 
 }]);
 
-myApp.controller('AddCtrl',['$scope','$state',function($scope,$state){
+myApp.controller('AddCtrl',['$scope','noteStore','$state',function($scope,noteStore,$state){
 
         var vm = this;
         vm.note = {
@@ -85,12 +63,13 @@ myApp.controller('AddCtrl',['$scope','$state',function($scope,$state){
         }
 
         vm.save = function(){
-          createnote(vm.note);
+          noteStore.create(vm.note);
           $state.go('list');
         }
 
 
 }]);
+
 
 
 })()
