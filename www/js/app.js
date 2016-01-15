@@ -39,10 +39,17 @@ myApp.config(function($stateProvider,$urlRouterProvider){
 
 myApp.controller('ListCtrl',['$scope','noteStore',function($scope,noteStore){
         var vm = this;
+        vm.reodering =  false;
         vm.notes = noteStore.list();
         vm.remove = function(noteId){
               noteStore.remove(noteId);
         };
+        vm.move = function(note,fromIndex,toIndex){
+          noteStore.move(note,fromIndex,toIndex);
+        }
+        vm.toggleReordering = function(){
+            vm.reodering = !vm.reodering;
+        }
 }]);
 
 myApp.controller('EditCtrl',['$scope','noteStore','$state',function($scope,noteStore,$state){
@@ -53,6 +60,7 @@ myApp.controller('EditCtrl',['$scope','noteStore','$state',function($scope,noteS
           noteStore.update(vm.note);
           $state.go('list');
         }
+
 
 }]);
 
