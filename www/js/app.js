@@ -40,6 +40,9 @@ myApp.config(function($stateProvider,$urlRouterProvider){
 myApp.controller('ListCtrl',['$scope','noteStore',function($scope,noteStore){
         var vm = this;
         vm.notes = noteStore.list();
+        vm.remove = function(noteId){
+              noteStore.remove(noteId);
+        };
 }]);
 
 myApp.controller('EditCtrl',['$scope','noteStore','$state',function($scope,noteStore,$state){
